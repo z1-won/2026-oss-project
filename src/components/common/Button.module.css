@@ -1,0 +1,64 @@
+.button {
+  display: inline-flex; /*버튼을 옆으로 나열할 수 있게 함 */
+  align-items: center; /* 버튼 안의 내용물을 세로의 가운데 */
+  justify-content: center; /* 버튼 안의 내용물을 가로 가운데 */
+  gap: 10px; /*글자 사이 간격 */
+  border: none; /*버튼 테두리 선을 없앰 */
+  border-radius: 10px; /* 버튼의 모서리를 10px만큼 둥글게 깎음 */
+  font-size: 14px; /* 글자 크기 */
+  font-weight: 500; /* 글자 두께 */
+  cursor: pointer; /*마우스를 올렸을 때 화살표가 손가락 모양으로 바꿈 */
+  transition: opacity 0.15s, transform 0.1s;
+  font-family: inherit; /*폰트를 부모 요소 */
+  height: 64px;
+  padding: 17px 33px 18px 33px;
+}
+
+/* 버튼을 클릭하는 순간(active) 살짝 작아지는 효과 */
+/* 비활성화된 버튼은 이 효과 제외 */
+.button:active:not(:disabled) {
+  transform: scale(0.98);
+}
+/* "이 버튼은 지금 못 눌러요" 를 시각적으로 표현 */
+.button:disabled {
+  /* disabled 붙으면 40% 투명 */
+  opacity: 0.4;
+  cursor: not-allowed; /* 커서 안 됨 */
+}
+
+/* variant */
+/*파란색 버튼 */
+.primary {
+  background: #256ef4;
+  color: #ffffff;
+}
+
+/* 마우스를 버튼 위에 올렸을 때(hover) 투명도를
+ 85%로 살짝 흐리게 해서 hover 효과 */
+.primary:hover:not(:disabled) {
+  opacity: 0.85;
+}
+
+/* 회색버튼 */
+.secondary {
+  background: #8a949e;
+  color: #ffffff;
+}
+
+.secondary:hover:not(:disabled) {
+  opacity: 0.85;
+}
+
+.danger {
+  background: #e24b4a;
+  color: #ffffff;
+}
+
+.danger:hover:not(:disabled) {
+  opacity: 0.85;
+}
+
+/* fullWidth */
+.fullWidth {
+  width: 100%;
+}
