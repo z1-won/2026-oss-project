@@ -1,0 +1,30 @@
+.card {
+  width: 282px;
+  height: 98px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  background: #eef2f7;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+  box-sizing: border-box;
+}
+
+.card:hover {
+  background: #d6e4ff;
+}
+
+.selected {
+  background: #256ef4;
+}
+
+.label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #1a1a1a;
+}
+
+.selected .label {
+  color: #ffffff;
+}
