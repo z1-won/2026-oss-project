@@ -1,0 +1,51 @@
+.header {
+  width: 100%;
+  background: #fbfbfb;
+  border-bottom: 1px solid #e0e0e0;
+  box-sizing: border-box;
+  padding: 42px 40px 14px 40px;
+}
+
+.top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.logo {
+  font-size: 27px;
+  font-weight: 800;
+  line-height: 1.5; /* 행간 150% */
+  letter-spacing: 4px; /* 자간 4px */
+  color: #000000;
+}
+
+.userMenu {
+  display: flex;
+  font-weight: 700;
+  gap: 20px;
+  font-size: 13px;
+  line-height: 1.5; /* 행간 150% */
+  color: #1e2124;
+  cursor: pointer;
+}
+
+.userMenu span:hover {
+  color: #1a1a1a;
+}
+
+.nav {
+  display: flex;
+  gap: 52px;
+  font-size: 14px;
+  color: #1a1a1a;
+  cursor: pointer;
+  background: #eef2f7;
+  padding: 14px 40px 13px 40px;
+  margin: 0 -40px;
+}
+
+.nav span:hover {
+  color: #256ef4;
+}
