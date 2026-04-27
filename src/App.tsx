@@ -1,121 +1,170 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+import { useState } from "react";
+import Header from "./components/organisms/Header";
+import Footer from "./components/organisms/Footer";
+import ArtPassLogo from "./components/common/ArtPassLogo";
+import { useAuth } from "./context/AuthContext";
+import MainPage from "./pages/MainPage";
+import ApplyPage from "./pages/ApplyPage";
+import ApplicationStatusPage from "./pages/ApplicationStatusPage";
+import SignupPage from "./pages/SignupPage";
+import LoginPage from "./pages/LoginPage";
+import MyPage from "./pages/MyPage";
+import ScrollToTop from "./components/common/ScrollToTop";
+import { PersonIcon, LoginIcon, LogoutIcon, MyPageIcon } from "./components/common/icons";
+import "./App.css";
+import { NAV_ITEMS_CONFIG, PROTECTED_PAGES, POLICY_LINKS, FAMILY_SITES, type Page } from "./constants/navigation";
 
-function App() {
-  const [count, setCount] = useState(0)
+export default function App() {
+  const [page, setPage] = useState<Page>("main");
+  const [prevPage, setPrevPage] = useState<Page>("main");
+  const [pendingPage, setPendingPage] = useState<Page | null>(null);
+  const { isLoggedIn, logout } = useAuth();
 
-  return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.tsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+  const navigateTo = (target: Page) => {
+    if (PROTECTED_PAGES.includes(target) && !isLoggedIn) {
+      setPendingPage(target);
+      setPage("login");
+      return;
+    }
+    setPrevPage(page);
+    setPage(target);
+  };
 
-      <div className="ticks"></div>
+  const handlePostLogin = () => {
+    setPage(pendingPage ?? "main");
+    setPendingPage(null);
+  };
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+  const handleLogout = () => {
+    logout();
+    setPage("main");
+  };
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+  const navItems = NAV_ITEMS_CONFIG.map((item) => ({
+    label: item.label,
+    href: "#",
+    active: item.page === page,
+    onClick: item.page ? (e: React.MouseEvent) => {
+      e.preventDefault();
+      navigateTo(item.page!);
+    } : undefined,
+  }));
+
+  const utilityItems = isLoggedIn
+    ? [
+        { label: "마이페이지", href: "#", icon: <MyPageIcon />, onClick: () => navigateTo("mypage") },
+        { label: "로그아웃",   href: "#", icon: <LogoutIcon />, onClick: handleLogout },
+      ]
+    : [
+        { label: "회원가입", href: "#", icon: <PersonIcon />, onClick: () => setPage("signup") },
+        { label: "로그인",   href: "#", icon: <LoginIcon />,  onClick: () => setPage("login") },
+      ];
+
+  const sharedHeader = (
+    <Header
+      serviceName="아트패스 artPass"
+      logo={<ArtPassLogo />}
+      navItems={navItems}
+      utilityItems={utilityItems}
+      onLogoClick={() => setPage("main")}
+    />
+  );
+
+  const scrollToTop = <ScrollToTop />;
+
+  const sharedFooter = (
+    <Footer
+      serviceName="아트패스 artPass"
+      orgName="공개SW프로젝트 1분반"
+      address="컴퓨터공학전공"
+      tel="044-000-0000"
+      fax="044-000-0001"
+      policyLinks={POLICY_LINKS}
+      familySites={FAMILY_SITES}
+    />
+  );
+
+  if (page === "main") {
+    return (
+      <div className="page">
+        {sharedHeader}
+        <main id="main-content">
+          <MainPage onApply={() => navigateTo("apply")} onStatus={() => navigateTo("status")} />
+        </main>
+        {sharedFooter}
+        {scrollToTop}
+      </div>
+    );
+  }
+
+  if (page === "apply") {
+    return (
+      <div className="page">
+        {sharedHeader}
+        <main id="main-content" className="applyPage">
+          <ApplyPage onGoToMyPage={() => navigateTo("mypage")} onGoToStatus={() => navigateTo("status")} />
+        </main>
+        {sharedFooter}
+        {scrollToTop}
+      </div>
+    );
+  }
+
+  if (page === "status") {
+    return (
+      <div className="page pageStatus">
+        {sharedHeader}
+        <main id="main-content" className="statusPage">
+          <ApplicationStatusPage onReapply={() => navigateTo("apply")} />
+        </main>
+        {sharedFooter}
+        {scrollToTop}
+      </div>
+    );
+  }
+
+  if (page === "signup") {
+    return (
+      <div className="page">
+        {sharedHeader}
+        <main id="main-content" className="applyPage">
+          <SignupPage onComplete={() => setPage("main")} onCancel={() => setPage("main")} />
+        </main>
+        {sharedFooter}
+        {scrollToTop}
+      </div>
+    );
+  }
+
+  if (page === "login") {
+    return (
+      <div className="page">
+        {sharedHeader}
+        <main id="main-content" className="applyPage">
+          <LoginPage
+            onSuccess={handlePostLogin}
+            onCancel={() => { setPendingPage(null); setPage("main"); }}
+            onSignup={() => setPage("signup")}
+          />
+        </main>
+        {sharedFooter}
+        {scrollToTop}
+      </div>
+    );
+  }
+
+  if (page === "mypage") {
+    return (
+      <div className="page">
+        {sharedHeader}
+        <main id="main-content" className="applyPage">
+          <MyPage onBack={() => setPage(prevPage)} />
+        </main>
+        {sharedFooter}
+        {scrollToTop}
+      </div>
+    );
+  }
+
+  return null;
 }
-
-export default App
