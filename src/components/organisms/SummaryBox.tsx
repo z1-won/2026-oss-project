@@ -1,4 +1,3 @@
-import React from "react";
 import InfoRow from "../molecules/InfoRow";
 import styles from "./SummaryBox.module.css";
 

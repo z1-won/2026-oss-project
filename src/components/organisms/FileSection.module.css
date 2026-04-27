@@ -1,14 +1,19 @@
 .section {
   display: flex;
   flex-direction: column;
-  gap: 40px;
-  width: 100%;
-  box-sizing: border-box;
+  gap: 20px;
 }
 
 .title {
   font-size: 20px;
   font-weight: 700;
-  color: #1a1a1a;
-  margin: 0;
+  color: var(--krds-text-1, #212529);
+  letter-spacing: -0.02em;
 }
+
+.fields {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
