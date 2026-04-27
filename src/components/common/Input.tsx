@@ -1,18 +1,20 @@
 import React from "react";
 import styles from "./Input.module.css";
 
-type InputType = "text" | "date" | "file";
+type InputType = "text" | "email" | "password" | "date" | "file";
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   type?: InputType;
   label?: string;
   placeholder?: string;
+  error?: boolean;
 }
 
 export default function Input({
   type = "text",
   label,
   placeholder,
+  error = false,
   className = "",
   ...props
 }: InputProps) {
@@ -25,8 +27,9 @@ export default function Input({
         className={[
           styles.input,
           type === "file" ? styles.file : "",
+          error ? styles.inputError : "",
           className,
-        ].join(" ")}
+        ].filter(Boolean).join(" ")}
         {...props}
       />
     </div>

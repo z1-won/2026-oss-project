@@ -1,38 +1,53 @@
-wrapper {
+.wrapper {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
 }
 
 .label {
   font-size: 14px;
   font-weight: 500;
-  color: #1a1a1a;
+  color: var(--krds-text-1, #212529);
 }
 
 .input {
-  height: 56px;
-  padding: 14px 16px 13px 16px;
-  border: 1px solid #58616a; /* 테두리 */
-  border-radius: 8px;
-  background: #ffffff;
+  height: 48px;
+  padding: 0 16px;
+  border: 1px solid var(--krds-border, #ced4da);
+  border-radius: 4px;
+  background: var(--krds-bg, #ffffff);
   font-size: 14px;
-  color: #1a1a1a;
+  color: var(--krds-text-1, #212529);
   font-family: inherit;
   outline: none;
   width: 100%;
   box-sizing: border-box;
+  transition: border-color 0.15s;
 }
 
 .input::placeholder {
-  color: #aaaaaa;
+  color: var(--krds-text-disabled, #adb5bd);
 }
 
 .input:focus {
-  border-color: #256ef4;
+  border-color: var(--krds-primary, #0050d0);
+  box-shadow: 0 0 0 3px rgba(0, 80, 208, 0.12);
+}
+
+.input[type="date"] {
+  color: var(--krds-text-1, #212529);
 }
 
 .file {
-  border-color: #cdd1d5;
-  color: #8a949e;
+  border-color: var(--krds-border, #ced4da);
+  color: var(--krds-text-disabled, #adb5bd);
+  cursor: pointer;
+}
+
+.inputError {
+  border-color: #d92b3a;
+}
+
+.inputError:focus {
+  box-shadow: 0 0 0 3px rgba(217, 43, 58, 0.1);
 }
