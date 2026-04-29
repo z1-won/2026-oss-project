@@ -1,12 +1,17 @@
-export type Page = "main" | "apply" | "status" | "signup" | "login" | "mypage";
+export type Page = "main" | "apply" | "status" | "signup" | "login" | "mypage" | "admin" | "findPassword" | "guide";
 
-export const PROTECTED_PAGES: Page[] = ["apply", "status", "mypage"];
+export const PROTECTED_PAGES: Page[] = ["apply", "status", "mypage", "admin"];
+export const ADMIN_PAGES: Page[] = ["admin"];
+export const USER_PAGES: Page[] = ["apply", "status", "mypage"];
 
 export const NAV_ITEMS_CONFIG: { label: string; page: Page | null }[] = [
   { label: "예술활동증명 신청", page: "apply" },
   { label: "신청 현황 조회",   page: "status" },
-  { label: "공지사항",        page: null },
-  { label: "이용안내",        page: null },
+  { label: "이용안내",        page: "guide" },
+];
+
+export const ADMIN_NAV_ITEMS_CONFIG: { label: string; page: Page | null }[] = [
+  { label: "신청 관리", page: "admin" },
 ];
 
 export const POLICY_LINKS: { label: string; href: string; highlight?: boolean }[] = [
