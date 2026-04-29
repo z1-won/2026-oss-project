@@ -13,6 +13,7 @@ import { useAuth } from "../context/AuthContext";
 import { submitApplication } from "../api/application";
 import type { SubmitApplicationRequest } from "../api/types";
 import { validateApplicationStep2 } from "../utils/validation";
+import { MAX_CATEGORIES } from "../constants/rules";
 
 interface ApplyPageProps {
   onGoToMyPage: () => void;
@@ -27,7 +28,7 @@ export default function ApplyPage({ onGoToMyPage, onGoToStatus }: ApplyPageProps
   const [selectedCategories, setSelectedCategories] = useState<string[]>(["문학"]);
   const [categoryForms, setCategoryForms] = useState<Record<string, Record<string, string>[]>>({});
   const [toastVisible, setToastVisible] = useState(false);
-  const [toastMessage, setToastMessage] = useState("최대 3개까지 선택 가능합니다.");
+  const [toastMessage, setToastMessage] = useState(`최대 ${MAX_CATEGORIES}개까지 선택 가능합니다.`);
   const toastTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [confirmTarget, setConfirmTarget] = useState<string | null>(null);
   const [confirmEntry, setConfirmEntry] = useState<{ cat: string; index: number } | null>(null);
@@ -47,7 +48,7 @@ export default function ApplyPage({ onGoToMyPage, onGoToStatus }: ApplyPageProps
       setConfirmTarget(cat);
       return;
     }
-    if (selectedCategories.length >= 3) { showToast("최대 3개까지 선택 가능합니다."); return; }
+    if (selectedCategories.length >= MAX_CATEGORIES) { showToast(`최대 ${MAX_CATEGORIES}개까지 선택 가능합니다.`); return; }
     setSelectedCategories((prev) => [...prev, cat]);
   };
 
@@ -107,8 +108,9 @@ export default function ApplyPage({ onGoToMyPage, onGoToStatus }: ApplyPageProps
   const handleSubmit = async () => {
     setSubmitting(true);
     try {
+      const fieldTypeLabel = selectedCategories.length === 1 ? "단일 분야" : `복합 분야 ${selectedCategories.length}개`;
       const data: SubmitApplicationRequest = {
-        type: "일반 유형",
+        type: `일반 유형 · ${fieldTypeLabel}`,
         categories: selectedCategories.map((cat) => {
           const entries = getEntries(cat);
           return {
@@ -170,7 +172,7 @@ export default function ApplyPage({ onGoToMyPage, onGoToStatus }: ApplyPageProps
         {step === 2 && (
           <>
             <section className="applySection">
-              <h2 className="sectionTitle">신청 분야 선택하기 (최대 3개)</h2>
+              <h2 className="sectionTitle">신청 분야 선택하기 (최대 {MAX_CATEGORIES}개)</h2>
               <div className="categoryGrid">
                 {CATEGORIES.map(({ label, icon }) => (
                   <SelectCard

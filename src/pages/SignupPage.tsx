@@ -6,6 +6,13 @@ import { EyeIcon } from "../components/common/icons";
 import { signup } from "../api/auth";
 import { useAuth } from "../context/AuthContext";
 import { formatPhone } from "../utils/formatters";
+import {
+  MIN_PASSWORD_LENGTH,
+  PHONE_DIGITS,
+  BIRTH_DIGITS,
+  AUTH_CODE_DIGITS,
+  AUTH_CODE_TIMEOUT_SECONDS,
+} from "../constants/rules";
 
 interface SignupPageProps {
   onComplete: () => void;
@@ -107,7 +114,7 @@ function VerifyStep({ onNext }: { onNext: (name: string, birth: string, gender: 
   const [codeSent, setCodeSent] = useState(false);
   const [code, setCode] = useState("");
   const [verified, setVerified] = useState(false);
-  const [timeLeft, setTimeLeft] = useState(180);
+  const [timeLeft, setTimeLeft] = useState(AUTH_CODE_TIMEOUT_SECONDS);
   const [loading, setLoading] = useState(false);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
@@ -117,7 +124,7 @@ function VerifyStep({ onNext }: { onNext: (name: string, birth: string, gender: 
 
   const startTimer = () => {
     if (timerRef.current) clearInterval(timerRef.current);
-    setTimeLeft(180);
+    setTimeLeft(AUTH_CODE_TIMEOUT_SECONDS);
     timerRef.current = setInterval(() => {
       setTimeLeft((prev) => {
         if (prev <= 1) { clearInterval(timerRef.current!); return 0; }
@@ -142,8 +149,8 @@ function VerifyStep({ onNext }: { onNext: (name: string, birth: string, gender: 
     if (timerRef.current) clearInterval(timerRef.current);
   };
 
-  const canSend = name && birth.replace(/\D/g, "").length === 8 && gender && carrier && phone.replace(/\D/g, "").length === 11;
-  const canVerify = code.length === 6 && timeLeft > 0;
+  const canSend = name && birth.replace(/\D/g, "").length === BIRTH_DIGITS && gender && carrier && phone.replace(/\D/g, "").length === PHONE_DIGITS;
+  const canVerify = code.length === AUTH_CODE_DIGITS && timeLeft > 0;
 
   return (
     <div className={styles.stepContent}>
@@ -172,7 +179,7 @@ function VerifyStep({ onNext }: { onNext: (name: string, birth: string, gender: 
               maxLength={10}
               value={birth}
               onChange={(e) => {
-                const d = e.target.value.replace(/\D/g, "").slice(0, 8);
+                const d = e.target.value.replace(/\D/g, "").slice(0, BIRTH_DIGITS);
                 let out = d;
                 if (d.length > 4) out = d.slice(0, 4) + "." + d.slice(4);
                 if (d.length > 6) out = d.slice(0, 4) + "." + d.slice(4, 6) + "." + d.slice(6);
@@ -250,9 +257,9 @@ function VerifyStep({ onNext }: { onNext: (name: string, birth: string, gender: 
                 <input
                   className={styles.input}
                   placeholder="인증번호 6자리"
-                  maxLength={6}
+                  maxLength={AUTH_CODE_DIGITS}
                   value={code}
-                  onChange={(e) => setCode(e.target.value.replace(/\D/g, "").slice(0, 6))}
+                  onChange={(e) => setCode(e.target.value.replace(/\D/g, "").slice(0, AUTH_CODE_DIGITS))}
                 />
                 {timeLeft > 0 ? (
                   <span className={styles.timer}>{pad(Math.floor(timeLeft / 60))}:{pad(timeLeft % 60)}</span>
@@ -308,10 +315,10 @@ function InfoStep({
   const [showPw, setShowPw] = useState(false);
 
   const pwMismatch = pwConfirm.length > 0 && pw !== pwConfirm;
-  const pwWeak = pw.length > 0 && pw.length < 8;
+  const pwWeak = pw.length > 0 && pw.length < MIN_PASSWORD_LENGTH;
   const emailInvalid = email.length > 0 && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
-  const canSubmit = email && !emailInvalid && pw.length >= 8 && pw === pwConfirm;
+  const canSubmit = email && !emailInvalid && pw.length >= MIN_PASSWORD_LENGTH && pw === pwConfirm;
 
   return (
     <div className={styles.stepContent}>
@@ -394,8 +401,8 @@ function CompleteStep({ name, onComplete }: { name: string; onComplete: () => vo
     <div className={styles.completeWrap}>
       <div className={styles.completeIcon}>
         <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" width={64} height={64}>
-          <circle cx="32" cy="32" r="28" stroke="#6D28D9" strokeWidth={2} />
-          <polyline points="20 33 28 41 44 25" stroke="#6D28D9" strokeWidth={3} />
+          <circle cx="32" cy="32" r="28" stroke="#1756BD" strokeWidth={2} />
+          <polyline points="20 33 28 41 44 25" stroke="#1756BD" strokeWidth={3} />
         </svg>
       </div>
       <h2 className={styles.completeTitle}>가입이 완료되었습니다!</h2>

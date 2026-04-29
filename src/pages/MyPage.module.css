@@ -63,7 +63,7 @@
   align-items: center;
   gap: 16px;
   padding: 24px 32px;
-  background: var(--krds-primary-light, #e8f0fc);
+  background: var(--krds-primary-light, #EBF2FF);
   border-bottom: 1px solid #C4B5FD;
 }
 
@@ -81,7 +81,7 @@
 }
 
 .avatarBtn:focus-visible {
-  outline: 2px solid var(--krds-primary, #0050d0);
+  outline: 2px solid var(--krds-primary, #1756BD);
   outline-offset: 2px;
 }
 
@@ -249,7 +249,7 @@
 .radioInput {
   width: 16px;
   height: 16px;
-  accent-color: var(--krds-primary, #0050d0);
+  accent-color: var(--krds-primary, #1756BD);
   cursor: pointer;
 }
 
@@ -278,7 +278,7 @@
 }
 
 .required {
-  color: var(--krds-primary, #0050d0);
+  color: var(--krds-primary, #1756BD);
   font-weight: 700;
   font-size: 12px;
 }
@@ -312,7 +312,7 @@
 }
 
 .input:focus {
-  border-color: var(--krds-primary, #0050d0);
+  border-color: var(--krds-primary, #1756BD);
   box-shadow: 0 0 0 3px rgba(0, 80, 208, 0.1);
 }
 

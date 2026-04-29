@@ -31,11 +31,11 @@
   width: 56px;
   height: 56px;
   border-radius: 14px;
-  background: var(--krds-primary-light, #e8f0fc);
+  background: var(--krds-primary-light, #EBF2FF);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--krds-primary, #0050d0);
+  color: var(--krds-primary, #1756BD);
   margin-bottom: 16px;
 }
 
@@ -66,12 +66,6 @@
   gap: 6px;
 }
 
-.labelRow {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
 .label {
   font-size: 13px;
   font-weight: 600;
@@ -79,9 +73,9 @@
 }
 
 .forgotBtn {
-  font-size: 12px;
-  font-weight: 500;
-  color: var(--krds-primary, #0050d0);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--krds-primary, #1756BD);
   background: none;
   border: none;
   cursor: pointer;
@@ -91,7 +85,7 @@
 }
 
 .forgotBtn:hover {
-  color: var(--krds-primary-hover, #003ea1);
+  color: var(--krds-primary-hover, #1248A4);
   text-decoration: underline;
 }
 
@@ -147,7 +141,7 @@
 .checkbox {
   width: 16px;
   height: 16px;
-  accent-color: var(--krds-primary, #0050d0);
+  accent-color: var(--krds-primary, #1756BD);
   cursor: pointer;
   flex-shrink: 0;
 }
@@ -158,96 +152,20 @@
   user-select: none;
 }
 
-/* ── 구분선 ──────────────────────────────── */
-.divider {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 20px 32px 0;
-}
-
-.divider::before,
-.divider::after {
-  content: "";
-  flex: 1;
-  height: 1px;
-  background: var(--krds-border, #ced4da);
-}
-
-.divider span {
-  font-size: 12px;
-  color: var(--krds-text-disabled, #adb5bd);
-  white-space: nowrap;
-}
-
-/* ── 간편 로그인 ─────────────────────────── */
-.socialSection {
-  padding: 16px 32px 0;
-}
-
-.socialLabel {
-  font-size: 12px;
-  color: var(--krds-text-disabled, #adb5bd);
-  text-align: center;
-  margin-bottom: 10px;
-}
-
-.socialGrid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 8px;
-}
-
-.socialBtn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 7px;
-  height: 44px;
-  border-radius: 6px;
-  font-size: 13px;
-  font-weight: 600;
-  font-family: inherit;
-  cursor: pointer;
-  transition: opacity 0.15s, box-shadow 0.15s;
-  border: none;
-}
-
-.socialBtn:hover {
-  opacity: 0.88;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
-}
-
-.kakao {
-  background: #FEE500;
-  color: #191919;
-}
-
-.naver {
-  background: #03C75A;
-  color: #fff;
-}
-
-.google {
-  background: #fff;
-  color: var(--krds-text-1, #212529);
-  border: 1px solid var(--krds-border, #ced4da) !important;
-}
-
-.naverN {
-  font-size: 15px;
-  font-weight: 900;
-  font-family: sans-serif;
-  line-height: 1;
-}
-
 /* ── 하단 링크 ───────────────────────────── */
 .footer {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
   gap: 8px;
   padding: 20px 32px;
+  border-top: 1px solid var(--krds-bg-muted, #f1f3f5);
+}
+
+.footerRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .footerText {
@@ -258,7 +176,7 @@
 .signupLink {
   font-size: 13px;
   font-weight: 700;
-  color: var(--krds-primary, #0050d0);
+  color: var(--krds-primary, #1756BD);
   background: none;
   border: none;
   cursor: pointer;
@@ -268,29 +186,10 @@
 }
 
 .signupLink:hover {
-  color: var(--krds-primary-hover, #003ea1);
+  color: var(--krds-primary-hover, #1248A4);
   text-decoration: underline;
 }
 
-.footerDot {
-  font-size: 13px;
-  color: var(--krds-border, #ced4da);
-}
-
-.cancelLink {
-  font-size: 13px;
-  color: var(--krds-text-3, #6c757d);
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 0;
-  font-family: inherit;
-  transition: color 0.12s;
-}
-
-.cancelLink:hover {
-  color: var(--krds-text-1, #212529);
-}
 
 /* ── 데모 안내 ───────────────────────────── */
 .demoHint {
@@ -327,8 +226,6 @@
 
   .cardHeader,
   .form,
-  .divider,
-  .socialSection,
   .footer,
   .demoHint {
     padding-left: 20px;

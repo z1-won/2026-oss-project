@@ -6,6 +6,7 @@ import { changePassword, verifyIdentity, uploadPhoto } from "../api/user";
 import Input from "../components/common/Input";
 import { EyeIcon } from "../components/common/icons";
 import { formatPhone } from "../utils/formatters";
+import { MIN_PASSWORD_LENGTH, PHONE_DIGITS, MAX_PEN_NAME_LENGTH } from "../constants/rules";
 
 interface MyPageProps {
   onBack: () => void;
@@ -33,12 +34,12 @@ export default function MyPage({ onBack }: MyPageProps) {
 
   const emailInvalid = email.length > 0 && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   const pwMismatch = newPwConfirm.length > 0 && newPw !== newPwConfirm;
-  const pwWeak = newPw.length > 0 && newPw.length < 8;
+  const pwWeak = newPw.length > 0 && newPw.length < MIN_PASSWORD_LENGTH;
   const pwChanging = currentPw.length > 0 || newPw.length > 0 || newPwConfirm.length > 0;
-  const pwValid = !pwChanging || (currentPw.length > 0 && newPw.length >= 8 && newPw === newPwConfirm);
+  const pwValid = !pwChanging || (currentPw.length > 0 && newPw.length >= MIN_PASSWORD_LENGTH && newPw === newPwConfirm);
 
   const canSave =
-    phone.replace(/\D/g, "").length === 11 &&
+    phone.replace(/\D/g, "").length === PHONE_DIGITS &&
     email.length > 0 &&
     !emailInvalid &&
     pwValid;
@@ -101,8 +102,8 @@ export default function MyPage({ onBack }: MyPageProps) {
             ) : (
               <svg viewBox="0 0 48 48" fill="none" width={48} height={48}>
                 <circle cx="24" cy="24" r="24" fill="#EDE9FE" />
-                <circle cx="24" cy="18" r="7" fill="#6D28D9" opacity="0.8" />
-                <path d="M10 42c0-7.7 6.3-13 14-13s14 5.3 14 13" fill="#6D28D9" opacity="0.5" />
+                <circle cx="24" cy="18" r="7" fill="#1756BD" opacity="0.8" />
+                <path d="M10 42c0-7.7 6.3-13 14-13s14 5.3 14 13" fill="#1756BD" opacity="0.5" />
               </svg>
             )}
             <span className={styles.avatarOverlay} aria-hidden="true">
@@ -199,7 +200,7 @@ export default function MyPage({ onBack }: MyPageProps) {
                 placeholder="작품에 표시될 필명을 입력하세요 (선택)"
                 value={penName}
                 onChange={(e) => setPenName(e.target.value)}
-                maxLength={30}
+                maxLength={MAX_PEN_NAME_LENGTH}
               />
               <p className={styles.fieldHint}>입력하지 않으면 이름({user?.name})으로 표시됩니다.</p>
             </div>
