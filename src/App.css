@@ -5,11 +5,18 @@
   background: var(--krds-bg, #ffffff);
 }
 
-/* ── 신청현황 페이지 래퍼 ─────────────── */
+/* ── 신청현황 페이지 ─────────────────── */
+/* 마스터-디테일 레이아웃 특성상 전체 화면 점유, 푸터 없음 */
+.pageStatus {
+  height: 100dvh;
+  overflow: hidden;
+}
+
 .statusPage {
   flex: 1;
   display: flex;
   flex-direction: column;
+  min-height: 0;
 }
 
 /* ── 신청 페이지 ──────────────────────── */
@@ -96,7 +103,7 @@
   margin: 0;
   padding: 8px 12px;
   background: var(--krds-bg-subtle, #f8f9fa);
-  border-left: 3px solid var(--krds-primary, #0050d0);
+  border-left: 3px solid var(--krds-primary, #1756BD);
   border-radius: 0 4px 4px 0;
   flex: 1;
 }
@@ -166,7 +173,7 @@
 .entryLabel {
   font-size: 13px;
   font-weight: 600;
-  color: var(--krds-primary, #0050d0);
+  color: var(--krds-primary, #1756BD);
 }
 
 .entryRemoveBtn {
@@ -214,9 +221,9 @@
   font-size: 14px;
   font-family: inherit;
   font-weight: 500;
-  color: var(--krds-primary, #0050d0);
-  background: var(--krds-primary-light, #e8f0fc);
-  border: 1px dashed var(--krds-primary, #0050d0);
+  color: var(--krds-primary, #1756BD);
+  background: var(--krds-primary-light, #EBF2FF);
+  border: 1px dashed var(--krds-primary, #1756BD);
   border-radius: 6px;
   padding: 10px 20px;
   cursor: pointer;
@@ -301,8 +308,8 @@
   align-items: center;
   padding: 6px 14px;
   border-radius: 20px;
-  background: var(--krds-primary-light, #e8f0fc);
-  color: var(--krds-primary, #0050d0);
+  background: var(--krds-primary-light, #EBF2FF);
+  color: var(--krds-primary, #1756BD);
   font-size: 14px;
   font-weight: 600;
   border: 1px solid #b8d0f7;
@@ -322,12 +329,12 @@
 .summaryBlockTitle {
   font-size: 15px;
   font-weight: 700;
-  color: var(--krds-primary, #0050d0);
+  color: var(--krds-primary, #1756BD);
   margin: 0;
   padding: 12px 20px;
   background: var(--krds-bg-subtle, #f8f9fa);
   border-bottom: 1px solid var(--krds-border, #ced4da);
-  border-left: 3px solid var(--krds-primary, #0050d0);
+  border-left: 3px solid var(--krds-primary, #1756BD);
 }
 
 .summaryEntry {
