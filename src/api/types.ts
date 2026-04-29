@@ -43,9 +43,14 @@ export interface Application {
   applicantName?: string;
 }
 
+export type EvidenceSlot = "workImage" | "detailPage1" | "detailPage2" | "income" | "other";
+
 export interface EntryFiles {
-  cover?: File;
-  inner?: File;
+  workImage?: File;
+  detailPage1?: File;
+  detailPage2?: File;
+  income?: File;
+  other?: File;
 }
 
 export type EntryFieldKey =

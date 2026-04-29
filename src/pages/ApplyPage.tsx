@@ -11,9 +11,37 @@ import { CATEGORY_FORM_CONFIG, CATEGORY_META } from "../constants/categoryFormCo
 import { CATEGORIES } from "../constants/categories";
 import { useAuth } from "../context/AuthContext";
 import { submitApplication } from "../api/application";
-import type { SubmitApplicationRequest } from "../api/types";
+import type { SubmitApplicationRequest, EvidenceSlot } from "../api/types";
 import { validateApplicationStep2 } from "../utils/validation";
 import { MAX_CATEGORIES } from "../constants/rules";
+
+const EVIDENCE_SLOTS: { key: EvidenceSlot; label: string; hint: string }[] = [
+  {
+    key: "workImage",
+    label: "작품정보이미지",
+    hint: "예: 제목, 포스터, 프로그램팸플릿, 발행정보, 방화정보, 연재출판정보 등",
+  },
+  {
+    key: "detailPage1",
+    label: "상세페이지 (1)",
+    hint: "예: 제목, 작품주요인, 상세이미지, 작품연재상세정보 등",
+  },
+  {
+    key: "detailPage2",
+    label: "상세페이지 (2)",
+    hint: "ISSN/ISBN, 발행처, 발행자 등",
+  },
+  {
+    key: "income",
+    label: "수입 관련 자료",
+    hint: "예: 통장사본, 제작비인건, 일급내역, 출산내역, 방퀴내역 등",
+  },
+  {
+    key: "other",
+    label: "기타",
+    hint: "예: 저작권자료, 초청장, 선정내역, 진행자료, 보도자료, 추가 내지, 추가 프로그램팸플릿, 온라인관련 증빙자료 등",
+  },
+];
 
 interface ApplyPageProps {
   onGoToMyPage: () => void;
@@ -23,8 +51,8 @@ interface ApplyPageProps {
 export default function ApplyPage({ onGoToMyPage, onGoToStatus }: ApplyPageProps) {
   const { user } = useAuth();
   const [step, setStep] = useState<1 | 2 | 3>(1);
-  const [fileNames, setFileNames] = useState<Record<string, Record<number, { cover?: string; inner?: string }>>>({});
-  const [entryFiles, setEntryFiles] = useState<Record<string, Record<number, { cover?: File; inner?: File }>>>({});
+  const [fileNames, setFileNames] = useState<Record<string, Record<number, Partial<Record<EvidenceSlot, string>>>>>({});
+  const [entryFiles, setEntryFiles] = useState<Record<string, Record<number, Partial<Record<EvidenceSlot, File>>>>>({});
   const [selectedCategories, setSelectedCategories] = useState<string[]>(["문학"]);
   const [categoryForms, setCategoryForms] = useState<Record<string, Record<string, string>[]>>({});
   const [toastVisible, setToastVisible] = useState(false);
@@ -90,7 +118,7 @@ export default function ApplyPage({ onGoToMyPage, onGoToStatus }: ApplyPageProps
     };
 
   const handleFileChange =
-    (cat: string, idx: number, slot: "cover" | "inner") =>
+    (cat: string, idx: number, slot: EvidenceSlot) =>
     (e: React.ChangeEvent<HTMLInputElement>) => {
       const file = e.target.files?.[0];
       setFileNames((prev) => ({
@@ -116,10 +144,7 @@ export default function ApplyPage({ onGoToMyPage, onGoToStatus }: ApplyPageProps
           return {
             name: cat,
             entries,
-            files: entries.map((_, idx) => ({
-              cover: entryFiles[cat]?.[idx]?.cover,
-              inner: entryFiles[cat]?.[idx]?.inner,
-            })),
+            files: entries.map((_, idx) => ({ ...entryFiles[cat]?.[idx] })),
           };
         }),
       };
@@ -252,14 +277,21 @@ export default function ApplyPage({ onGoToMyPage, onGoToStatus }: ApplyPageProps
                           ))}
                         </div>
                         <div className="entryFiles">
-                          <FileInput
-                            label="표지 (PDF)"
-                            onChange={handleFileChange(cat, idx, "cover")}
-                          />
-                          <FileInput
-                            label="내지 (PDF)"
-                            onChange={handleFileChange(cat, idx, "inner")}
-                          />
+                          <p className="entryFilesTitle">증빙자료 제출</p>
+                          {EVIDENCE_SLOTS.map(({ key, label, hint }) => (
+                            <div key={key} className="evidenceRow">
+                              <div className="evidenceInfo">
+                                <span className="evidenceLabel">{label}</span>
+                                <span className="evidenceHint">{hint}</span>
+                              </div>
+                              <div className="evidenceInput">
+                                <FileInput
+                                  label={label}
+                                  onChange={handleFileChange(cat, idx, key)}
+                                />
+                              </div>
+                            </div>
+                          ))}
                         </div>
                       </div>
                     ))}
@@ -353,8 +385,9 @@ export default function ApplyPage({ onGoToMyPage, onGoToStatus }: ApplyPageProps
                             {fields.map((field) => (
                               <InfoRow key={field.key} label={field.label} value={entry[field.key] || "-"} />
                             ))}
-                            <InfoRow label="표지 파일" value={fileNames[cat]?.[idx]?.cover || "미첨부"} />
-                            <InfoRow label="내지 파일" value={fileNames[cat]?.[idx]?.inner || "미첨부"} />
+                            {EVIDENCE_SLOTS.map(({ key, label }) => (
+                              <InfoRow key={key} label={label} value={fileNames[cat]?.[idx]?.[key] || "미첨부"} />
+                            ))}
                           </div>
                         </div>
                       ))}
