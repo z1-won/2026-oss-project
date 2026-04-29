@@ -7,9 +7,17 @@ export interface User {
   isVerified: boolean;
   nationality: "korean" | "foreign";
   penName: string;
+  role: "user" | "admin";
 }
 
 export type AppStatus = "심사중" | "승인" | "반려";
+
+export interface EntryFile {
+  label: string;
+  filename: string;
+}
+
+export type EntryStatus = "승인" | "반려" | "심사중";
 
 export interface ApplicationEntry {
   category: string;
@@ -17,6 +25,9 @@ export interface ApplicationEntry {
   publisher: string;
   date: string;
   genre: string;
+  entryStatus?: EntryStatus;
+  entryReason?: string;
+  files?: EntryFile[];
 }
 
 export interface Application {
@@ -29,6 +40,7 @@ export interface Application {
   statusDate: string;
   reason?: string;
   entries: ApplicationEntry[];
+  applicantName?: string;
 }
 
 export interface EntryFiles {
@@ -36,9 +48,14 @@ export interface EntryFiles {
   inner?: File;
 }
 
+export type EntryFieldKey =
+  | "title" | "publisher" | "genre" | "publishDate" | "volume" | "character"
+  | "venue" | "date" | "method" | "serialStart" | "serialEnd"
+  | "programTitle" | "broadcaster" | "programType" | "role" | "company";
+
 export interface CategorySubmission {
   name: string;
-  entries: Record<string, string>[];
+  entries: Partial<Record<EntryFieldKey, string>>[];
   files: EntryFiles[];
 }
 
