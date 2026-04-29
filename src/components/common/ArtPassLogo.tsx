@@ -16,7 +16,7 @@ export default function ArtPassLogo({ size = 32 }: ArtPassLogoProps) {
         fill="none"
         aria-hidden="true"
       >
-        <rect width="36" height="36" rx="8" fill="#6D28D9" />
+        <rect width="36" height="36" rx="8" fill="#1756BD" />
         {/* A — left and right strokes */}
         <path
           d="M10 28 L18 8 L26 28"

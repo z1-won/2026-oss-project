@@ -4,24 +4,24 @@
 
 /* 토큰 */
 :root {
-  --btn-primary-bg: #6D28D9;
-  --btn-primary-bg-hover: #5B21B6;
-  --btn-primary-bg-active: #4C1D95;
+  --btn-primary-bg: #1756BD;
+  --btn-primary-bg-hover: #1248A4;
+  --btn-primary-bg-active: #0D3A88;
   --btn-primary-text: #ffffff;
 
-  --btn-secondary-border: #6D28D9;
-  --btn-secondary-text: #6D28D9;
-  --btn-secondary-bg-hover: #EDE9FE;
-  --btn-secondary-bg-active: #DDD6FE;
+  --btn-secondary-border: #1756BD;
+  --btn-secondary-text: #1756BD;
+  --btn-secondary-bg-hover: #EBF2FF;
+  --btn-secondary-bg-active: #D6E6FF;
 
   --btn-tertiary-border: #6b6f7b;
   --btn-tertiary-text: #343539;
   --btn-tertiary-bg-hover: #f1f2f4;
   --btn-tertiary-bg-active: #e3e5e8;
 
-  --btn-ghost-text: #6D28D9;
-  --btn-ghost-bg-hover: #EDE9FE;
-  --btn-ghost-bg-active: #DDD6FE;
+  --btn-ghost-text: #1756BD;
+  --btn-ghost-bg-hover: #EBF2FF;
+  --btn-ghost-bg-active: #D6E6FF;
 
   --btn-danger-bg: #c0392b;
   --btn-danger-bg-hover: #a93226;
@@ -32,7 +32,7 @@
   --btn-disabled-text: #9ca3af;
   --btn-disabled-border: #d1d5db;
 
-  --btn-focus-outline: #6D28D9;
+  --btn-focus-outline: #1756BD;
   --btn-focus-outline-offset: 2px;
 }
 

@@ -4,10 +4,10 @@
 
 :root {
   /* Primary */
-  --krds-primary:        #6D28D9;
-  --krds-primary-hover:  #5B21B6;
-  --krds-primary-active: #4C1D95;
-  --krds-primary-light:  #EDE9FE;
+  --krds-primary:        #1756BD;
+  --krds-primary-hover:  #1248A4;
+  --krds-primary-active: #0D3A88;
+  --krds-primary-light:  #EBF2FF;
 
   /* Text */
   --krds-text-1: #212529;

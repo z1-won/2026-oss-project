@@ -195,10 +195,13 @@ export default function DatePicker({ value = "", onChange, placeholder = "YYYY.M
 
           <div className={styles.footer}>
             <button type="button" className={styles.todayBtn} onClick={() => {
-              const d = today;
-              setViewYear(d.getFullYear());
-              setViewMonth(d.getMonth());
-              selectDay(d.getDate());
+              const y = today.getFullYear();
+              const m = today.getMonth();
+              const d = today.getDate();
+              setViewYear(y);
+              setViewMonth(m);
+              onChange?.(formatDate(y, m, d));
+              setOpen(false);
             }}>
               오늘
             </button>

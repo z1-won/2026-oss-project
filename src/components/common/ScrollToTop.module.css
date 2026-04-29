@@ -5,7 +5,7 @@
   width: 44px;
   height: 44px;
   border-radius: 50%;
-  background: var(--krds-primary, #0050d0);
+  background: var(--krds-primary, #1756BD);
   color: #fff;
   border: none;
   cursor: pointer;
@@ -27,5 +27,5 @@
 }
 
 .btn:hover {
-  background: var(--krds-primary-hover, #003ea1);
+  background: var(--krds-primary-hover, #1248A4);
 }

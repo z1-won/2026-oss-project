@@ -27,12 +27,12 @@
 }
 
 .box:hover {
-  border-color: var(--krds-primary, #0050d0);
+  border-color: var(--krds-primary, #1756BD);
 }
 
 .box:focus {
   outline: none;
-  border-color: var(--krds-primary, #0050d0);
+  border-color: var(--krds-primary, #1756BD);
   box-shadow: 0 0 0 3px rgba(0, 80, 208, 0.12);
 }
 

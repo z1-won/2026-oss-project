@@ -60,7 +60,7 @@
 
 .utilityLink:hover .utilityIcon,
 .utilityLink:hover .utilityLabel {
-  color: var(--krds-primary, #0050d0);
+  color: var(--krds-primary, #1756BD);
 }
 
 /* ── 건너뛰기 링크 ────────────────────── */
@@ -69,7 +69,7 @@
   top: -100px;
   left: 0;
   padding: 8px 16px;
-  background: var(--krds-primary, #0050d0);
+  background: var(--krds-primary, #1756BD);
   color: var(--krds-bg, #ffffff);
   font-size: 14px;
   font-weight: 600;
@@ -152,12 +152,12 @@
 }
 
 .gnbLink:hover {
-  color: var(--krds-primary, #0050d0);
+  color: var(--krds-primary, #1756BD);
 }
 
 .gnbActive {
-  color: var(--krds-primary, #0050d0);
-  border-bottom-color: var(--krds-primary, #0050d0);
+  color: var(--krds-primary, #1756BD);
+  border-bottom-color: var(--krds-primary, #1756BD);
 }
 
 /* ── 모바일 햄버거 ────────────────────── */
@@ -238,7 +238,7 @@
   }
 
   .gnbActive {
-    border-left-color: var(--krds-primary, #0050d0);
+    border-left-color: var(--krds-primary, #1756BD);
     border-bottom-color: transparent;
   }
 }

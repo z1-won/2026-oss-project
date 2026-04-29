@@ -32,7 +32,7 @@
 }
 
 .input:focus {
-  border-color: var(--krds-primary, #0050d0);
+  border-color: var(--krds-primary, #1756BD);
   box-shadow: 0 0 0 3px rgba(0, 80, 208, 0.12);
 }
 
@@ -55,7 +55,7 @@
 }
 
 .iconBtn:hover {
-  color: var(--krds-primary, #0050d0);
+  color: var(--krds-primary, #1756BD);
 }
 
 /* ─── 팝업 달력 ─── */
@@ -128,7 +128,7 @@
 }
 
 .th.sat {
-  color: var(--krds-primary, #0050d0);
+  color: var(--krds-primary, #1756BD);
 }
 
 .td {
@@ -155,21 +155,21 @@
 }
 
 .dayBtn:not(.outside):not(.selected):hover {
-  background: var(--krds-primary-light, #e8f0fc);
+  background: var(--krds-primary-light, #EBF2FF);
   border-color: transparent;
 }
 
 /* 오늘 날짜 */
 .dayBtn.today {
-  border-color: var(--krds-primary, #0050d0);
-  color: var(--krds-primary, #0050d0);
+  border-color: var(--krds-primary, #1756BD);
+  color: var(--krds-primary, #1756BD);
   font-weight: 600;
 }
 
 /* 선택된 날짜 */
 .dayBtn.selected {
-  background: var(--krds-primary, #0050d0);
-  border-color: var(--krds-primary, #0050d0);
+  background: var(--krds-primary, #1756BD);
+  border-color: var(--krds-primary, #1756BD);
   color: #fff;
   font-weight: 600;
 }
@@ -187,7 +187,7 @@
 
 /* 토요일 */
 .dayBtn.saturday {
-  color: var(--krds-primary, #0050d0);
+  color: var(--krds-primary, #1756BD);
 }
 
 /* ─── 오늘 버튼 ─── */
@@ -205,14 +205,14 @@
   font-size: 13px;
   font-family: inherit;
   font-weight: 500;
-  color: var(--krds-primary, #0050d0);
+  color: var(--krds-primary, #1756BD);
   background: none;
-  border: 1px solid var(--krds-primary, #0050d0);
+  border: 1px solid var(--krds-primary, #1756BD);
   border-radius: 4px;
   cursor: pointer;
   transition: background 0.12s, color 0.12s;
 }
 
 .todayBtn:hover {
-  background: var(--krds-primary-light, #e8f0fc);
+  background: var(--krds-primary-light, #EBF2FF);
 }

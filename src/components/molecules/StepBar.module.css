@@ -18,7 +18,7 @@
 }
 
 .active {
-  background: var(--krds-primary, #0050d0);
+  background: var(--krds-primary, #1756BD);
   color: #ffffff;
 }
 

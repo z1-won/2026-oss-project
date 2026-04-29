@@ -22,10 +22,10 @@ export const LogoutIcon = () => (
 );
 
 export const MyPageIcon = () => (
-  <svg viewBox="0 0 24 24" fill="currentColor" strokeWidth={0}>
-    <circle cx="12" cy="12" r="10" fill="#c8cdd4" />
-    <circle cx="12" cy="9" r="3.5" fill="#fff" />
-    <path d="M5.5 19.5c0-3.6 2.9-6 6.5-6s6.5 2.4 6.5 6" fill="#fff" />
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
+    <circle cx="12" cy="12" r="9" />
+    <circle cx="12" cy="10" r="3" />
+    <path d="M6.5 20c0-3 2.5-5 5.5-5s5.5 2 5.5 5" />
   </svg>
 );
 
@@ -33,11 +33,11 @@ export const EyeIcon = ({ visible }: { visible: boolean }) =>
   visible ? (
     <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth={1.6} strokeLinecap="round" width={18} height={18}>
       <path d="M2 10s3-6 8-6 8 6 8 6-3 6-8 6-8-6-8-6z" />
-      <line x1="3" y1="3" x2="17" y2="17" />
+      <circle cx="10" cy="10" r="2.5" />
     </svg>
   ) : (
     <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth={1.6} strokeLinecap="round" width={18} height={18}>
       <path d="M2 10s3-6 8-6 8 6 8 6-3 6-8 6-8-6-8-6z" />
-      <circle cx="10" cy="10" r="2.5" />
+      <line x1="3" y1="3" x2="17" y2="17" />
     </svg>
   );

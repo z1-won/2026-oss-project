@@ -18,14 +18,14 @@
 }
 
 .card:hover {
-  background: var(--krds-primary-light, #e8f0fc);
-  border-color: var(--krds-primary, #0050d0);
+  background: var(--krds-primary-light, #EBF2FF);
+  border-color: var(--krds-primary, #1756BD);
   box-shadow: 0 2px 8px rgba(0, 80, 208, 0.1);
 }
 
 .selected {
-  background: var(--krds-primary, #0050d0);
-  border-color: var(--krds-primary, #0050d0);
+  background: var(--krds-primary, #1756BD);
+  border-color: var(--krds-primary, #1756BD);
   box-shadow: 0 2px 8px rgba(0, 80, 208, 0.2);
 }
 
@@ -38,7 +38,7 @@
 }
 
 .card:hover .icon {
-  color: var(--krds-primary, #0050d0);
+  color: var(--krds-primary, #1756BD);
 }
 
 .selected .icon {
@@ -55,7 +55,7 @@
 }
 
 .card:hover .label {
-  color: var(--krds-primary, #0050d0);
+  color: var(--krds-primary, #1756BD);
 }
 
 .selected .label {
