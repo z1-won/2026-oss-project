@@ -13,17 +13,12 @@ function getRejectedCount(entries: ApplicationEntry[]) {
   return entries.filter((e) => e.entryStatus === "반려").length;
 }
 
-// ── 상태 배지 ─────────────────────────────────────────────────
+const STATUS_ORDER: AppStatus[] = ["반려", "심사중", "승인"];
+
 const STATUS_CFG: Record<AppStatus, { label: string; cls: string }> = {
   심사중: { label: "심사중", cls: "badgePending"  },
   승인:   { label: "승인",   cls: "badgeApproved" },
   반려:   { label: "반려",   cls: "badgeRejected" },
-};
-
-const ENTRY_STATUS_CFG: Record<EntryStatus, { label: string; cls: string }> = {
-  심사중: { label: "심사중", cls: "entryTagPending"  },
-  승인:   { label: "승인",   cls: "entryTagApproved" },
-  반려:   { label: "반려",   cls: "entryTagRejected" },
 };
 
 function StatusBadge({ status }: { status: AppStatus }) {
@@ -31,11 +26,17 @@ function StatusBadge({ status }: { status: AppStatus }) {
   return <span className={`${styles.badge} ${styles[cls]}`}>{label}</span>;
 }
 
+const ENTRY_STATUS_CFG: Record<EntryStatus, { label: string; cls: string }> = {
+  심사중: { label: "심사중", cls: "entryTagPending"  },
+  승인:   { label: "승인",   cls: "entryTagApproved" },
+  반려:   { label: "반려",   cls: "entryTagRejected" },
+};
+
 // ── 타임라인 ──────────────────────────────────────────────────
 const STEPS = ["접수 완료", "서류 심사", "심사 완료"];
 
 function StatusTimeline({ status }: { status: AppStatus }) {
-  const active = status === "심사중" ? 1 : 2;
+  const active = status === "심사중" ? 1 : status === "승인" ? STEPS.length : 2;
   const isRejected = status === "반려";
 
   return (
@@ -67,7 +68,12 @@ function StatusTimeline({ status }: { status: AppStatus }) {
             {i < STEPS.length - 1 && (
               <div className={`${styles.timelineConnector} ${done ? styles.timelineConnectorDone : ""}`} />
             )}
-            <span className={`${styles.timelineLabel} ${i <= active ? styles.timelineLabelActive : ""}`}>
+            <span className={`${styles.timelineLabel} ${
+              done ? styles.timelineLabelDone :
+              (current && isRejected) ? styles.timelineLabelRejected :
+              current ? styles.timelineLabelActive :
+              ""
+            }`}>
               {label}
             </span>
           </div>
@@ -129,7 +135,6 @@ function StatusBanner({ app }: { app: Application }) {
 // ── PDF 다운로드 버튼 ─────────────────────────────────────────
 function FileBtn({ label, filename }: { label: string; filename: string }) {
   function handleDownload() {
-    // TODO: 실제 연동 시 → fetch(`/api/files/${filename}`)
     const blob = new Blob([`[데모] ${filename}`], { type: "application/pdf" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
@@ -146,59 +151,198 @@ function FileBtn({ label, filename }: { label: string; filename: string }) {
   );
 }
 
+// ── 반려 사유 모달 ────────────────────────────────────────────
+function ReasonModal({ entry, index, onClose, onReapply }: {
+  entry: ApplicationEntry;
+  index: number;
+  onClose: () => void;
+  onReapply?: () => void;
+}) {
+  const subtitle = [entry.category, entry.genre, entry.publisher, entry.date].filter(Boolean).join("  ·  ");
+  const d = entry.rejectionDetail;
+
+  const criteriaIconCls = (s: "fail" | "pass" | "neutral") =>
+    s === "fail" ? styles.criteriaIconFail : s === "pass" ? styles.criteriaIconPass : styles.criteriaIconNeutral;
+  const criteriaIconChar = (s: "fail" | "pass" | "neutral") =>
+    s === "fail" ? "✕" : s === "pass" ? "✓" : "—";
+
+  return (
+    <div className={styles.modalOverlay} onClick={onClose}>
+      <div className={styles.modalContainer} onClick={(e) => e.stopPropagation()}>
+
+        {/* 헤더 */}
+        <div className={styles.modalHeader}>
+          <div className={styles.modalHeaderLeft}>
+            <span className={styles.modalTag}>⚠ 반려</span>
+            <h3 className={styles.modalTitle}>{entry.title}</h3>
+            <span className={styles.modalSubtitle}>{subtitle}</span>
+          </div>
+          <button type="button" className={styles.modalClose} onClick={onClose} aria-label="닫기">✕</button>
+        </div>
+
+        {/* 바디 */}
+        <div className={styles.modalBody}>
+
+          {/* 작품 정보 */}
+          <div className={styles.modalWorkInfo}>
+            <div className={styles.modalWorkNum}>{index + 1}</div>
+            <div>
+              <div className={styles.modalWorkTitle}>{entry.title}</div>
+              <div className={styles.modalWorkMeta}>{subtitle}</div>
+            </div>
+          </div>
+
+          {/* 반려 사유 */}
+          <div className={styles.modalReasonBox}>
+            <div className={styles.modalReasonBoxTitle}>
+              <svg width="13" height="13" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                <circle cx="8" cy="8" r="7" stroke="#d32f2f" strokeWidth="1.5"/>
+                <path d="M8 5v4M8 11v.5" stroke="#d32f2f" strokeWidth="1.5" strokeLinecap="round"/>
+              </svg>
+              심사관 반려 사유
+            </div>
+            <div className={styles.modalReasonBoxText}>{d?.fullReason ?? entry.entryReason}</div>
+          </div>
+
+          {/* 심사 기준 */}
+          {d?.criteria && (
+            <div className={styles.modalCriteria}>
+              <div className={styles.modalCriteriaHeader}>
+                <svg width="13" height="13" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                  <rect x="2" y="2" width="12" height="12" rx="2" stroke="#1a56db" strokeWidth="1.5"/>
+                  <path d="M5 8h6M5 5.5h6M5 10.5h4" stroke="#1a56db" strokeWidth="1.2" strokeLinecap="round"/>
+                </svg>
+                {d.criteriaTitle ?? "예술활동증명 세부 기준"}
+              </div>
+              <div className={styles.modalCriteriaBody}>
+                {d.criteriaSubtitle && <div className={styles.criteriaSubtitle}>{d.criteriaSubtitle}</div>}
+                {d.criteria.map((c, i) => (
+                  <div key={i} className={`${styles.criteriaRow} ${c.highlight ? styles.criteriaRowHighlight : ""}`}>
+                    <div className={`${styles.criteriaIcon} ${criteriaIconCls(c.status)}`}>{criteriaIconChar(c.status)}</div>
+                    <div className={styles.criteriaText}>{c.text}</div>
+                    <span className={`${styles.criteriaBadge} ${c.badge === "미충족" ? styles.criteriaBadgeRequired : styles.criteriaBadgeMet}`}>{c.badge}</span>
+                  </div>
+                ))}
+                <div className={styles.criteriaNote}>
+                  ※ 복수 기준 해당 시 각 기준 충족 하한을 1점으로 환산하여 합계 1점 이상이면 충족으로 인정합니다.
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* 미충족 항목 */}
+          {d?.unmetItems && d.unmetItems.length > 0 && (
+            <div className={styles.unmetBox}>
+              <div className={styles.unmetBoxTitle}>
+                <svg width="13" height="13" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                  <path d="M8 2L14 13H2L8 2Z" stroke="#b45309" strokeWidth="1.5" strokeLinejoin="round"/>
+                  <path d="M8 7v3M8 11.5v.5" stroke="#b45309" strokeWidth="1.3" strokeLinecap="round"/>
+                </svg>
+                반려 원인 — 보완이 필요한 항목
+              </div>
+              <div className={styles.unmetList}>
+                {d.unmetItems.map((item, i) => (
+                  <div key={i} className={styles.unmetItem}>
+                    <div className={styles.unmetDot} />
+                    <span>{item}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* 보완 방법 */}
+          {d?.actionSteps && d.actionSteps.length > 0 && (
+            <div className={styles.modalActionGuide}>
+              <div className={styles.modalActionGuideTitle}>
+                <svg width="13" height="13" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                  <circle cx="8" cy="8" r="6.5" stroke="#1a56db" strokeWidth="1.4"/>
+                  <path d="M6 8l2 2 3-3" stroke="#1a56db" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+                재신청을 위한 보완 방법
+              </div>
+              <div className={styles.actionSteps}>
+                {d.actionSteps.map((step, i) => (
+                  <div key={i} className={styles.actionStep}>
+                    <div className={styles.actionStepNum}>{i + 1}</div>
+                    <div className={styles.actionStepText}>{step}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+        </div>
+
+        {/* 푸터 */}
+        <div className={styles.modalFooter}>
+          <button type="button" className={styles.modalBtnSecondary} onClick={onClose}>닫기</button>
+          <button type="button" className={styles.modalBtnPrimary} onClick={() => { onClose(); onReapply?.(); }}>
+            이 작품만 재신청하기 →
+          </button>
+        </div>
+
+      </div>
+    </div>
+  );
+}
+
 // ── 작품 카드 ─────────────────────────────────────────────────
-function EntryCard({ entry, index }: { entry: ApplicationEntry; index: number }) {
+function EntryCard({ entry, index, onReapply }: { entry: ApplicationEntry; index: number; onReapply?: () => void }) {
+  const [showModal, setShowModal] = useState(false);
   const status = entry.entryStatus ?? "심사중";
   const isRejected = status === "반려";
   const isApproved = status === "승인";
   const { label, cls } = ENTRY_STATUS_CFG[status];
 
+  const metaParts = [
+    entry.genre, entry.publisher, entry.date,
+    entry.character,
+    entry.volume,
+    entry.method && entry.method !== entry.genre ? entry.method : undefined,
+    entry.role   && entry.role   !== entry.genre ? entry.role   : undefined,
+    (entry.serialStart || entry.serialEnd)
+      ? [entry.serialStart, entry.serialEnd].filter(Boolean).join(" ~ ")
+      : undefined,
+  ].filter(Boolean).join("  ·  ");
+
+  const seqCls = isRejected ? styles.entrySeqRejected
+               : isApproved ? styles.entrySeqApproved
+               : styles.entrySeqPending;
+
   return (
     <div className={`${styles.entryCard} ${isRejected ? styles.entryCardRejected : ""}`}>
-      <div className={styles.entryCardTop}>
-        {/* 상태 인디케이터 */}
-        <div className={`${styles.entryDot} ${isRejected ? styles.entryDotRejected : isApproved ? styles.entryDotApproved : styles.entryDotPending}`}>
-          {isApproved ? (
-            <svg viewBox="0 0 10 10" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" width={7} height={7}>
-              <polyline points="1.5 5.5 4 8 8.5 2.5" />
-            </svg>
-          ) : isRejected ? (
-            <svg viewBox="0 0 10 10" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" width={7} height={7}>
-              <line x1="2" y1="2" x2="8" y2="8" /><line x1="8" y1="2" x2="2" y2="8" />
-            </svg>
-          ) : (
-            <span className={styles.entryDotInner} />
-          )}
-        </div>
-
-        {/* 작품 정보 */}
+      <div className={styles.entryRow}>
+        <span className={`${styles.entrySeq} ${seqCls}`}>{index + 1}</span>
         <div className={styles.entryInfo}>
           <div className={styles.entryTitleRow}>
-            <span className={styles.entrySeq}>{index + 1}</span>
             <span className={styles.entryTitle}>{entry.title}</span>
             <span className={`${styles.entryTag} ${styles[cls]}`}>{label}</span>
+            {entry.files && entry.files.length > 0 && (
+              <div className={styles.entryFiles}>
+                {entry.files.map((f) => <FileBtn key={f.label} label={f.label} filename={f.filename} />)}
+              </div>
+            )}
           </div>
-          <div className={styles.entryMeta}>
-            {[entry.genre, entry.publisher, entry.date].filter(Boolean).join("  ·  ")}
-          </div>
+          {metaParts && <div className={styles.entryMeta}>{metaParts}</div>}
         </div>
-
-        {/* PDF 다운로드 */}
-        {entry.files && entry.files.length > 0 && (
-          <div className={styles.entryFiles}>
-            {entry.files.map((f) => (
-              <FileBtn key={f.label} label={f.label} filename={f.filename} />
-            ))}
-          </div>
-        )}
       </div>
 
-      {/* 반려 사유 — 이 페이지의 핵심 정보 */}
       {isRejected && entry.entryReason && (
-        <div className={styles.rejectionBox}>
-          <p className={styles.rejectionBoxLabel}>반려 사유</p>
-          <p className={styles.rejectionBoxText}>{entry.entryReason}</p>
+        <div className={styles.rejectionInline}>
+          <span className={styles.rejectionInlineLabel}>반려 사유</span>
+          <span className={styles.rejectionInlineText}>{entry.entryReason}</span>
+          <button
+            type="button"
+            className={styles.reasonDetailBtn}
+            onClick={() => setShowModal(true)}
+          >
+            상세 보기 →
+          </button>
         </div>
+      )}
+      {showModal && entry.entryReason && (
+        <ReasonModal entry={entry} index={index} onClose={() => setShowModal(false)} onReapply={onReapply} />
       )}
     </div>
   );
@@ -217,11 +361,19 @@ function DetailPanel({ app, onClose, onReapply }: { app: Application; onClose: (
 
   return (
     <div className={styles.detail}>
-      {/* ── 헤더 ── */}
+      {/* ── 헤더: 분야명 + 접수번호 ── */}
       <div className={styles.detailHeader}>
         <div className={styles.detailHeaderLeft}>
-          <StatusBadge status={app.status} />
-          <span className={styles.detailApplyNo}>{app.applyNo}</span>
+          <p className={styles.detailTitle}>
+            {app.categories.map((cat, i) => (
+              <span key={cat} className={styles.detailCatItem}>
+                {i > 0 && <span className={styles.detailCatSep}>/</span>}
+                <CategoryIcon category={cat} size={14} />
+                {cat}
+              </span>
+            ))}
+          </p>
+          <span className={styles.detailApplyNo}>접수번호 {app.applyNo}</span>
         </div>
         <button type="button" className={styles.closeBtn} onClick={onClose} aria-label="닫기">
           <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" width={16} height={16}>
@@ -236,26 +388,36 @@ function DetailPanel({ app, onClose, onReapply }: { app: Application; onClose: (
 
         <div className={styles.detailBody}>
 
-          {/* ── 신청 요약 인포바 ── */}
+          {/* ── 요약 바: 분야·기간·건수 한 줄 ── */}
           <div className={styles.infoBar}>
-            <span className={styles.infoFieldType}>{fieldType}</span>
-            <span className={styles.infoSep} />
-            <span>{app.type}</span>
-            <span className={styles.infoSep} />
-            <span>{app.applyDate} 신청</span>
+            <span>
+              <span className={styles.infoLabel}>분야</span>
+              {fieldType} ({app.categories.join("·")})
+            </span>
             <span className={styles.infoSep} />
             <span>
-              총 {app.entries.length}점
-              {rejectedCount > 0 && (
-                <span className={styles.infoRejected}> · 반려 {rejectedCount}건</span>
-              )}
+              <span className={styles.infoLabel}>유효기간</span>
+              {app.applyDate}
             </span>
+            <span className={styles.infoSep} />
+            <span>
+              <span className={styles.infoLabel}>총 작품</span>
+              {app.entries.length}건
+            </span>
+            {rejectedCount > 0 && (
+              <>
+                <span className={styles.infoSep} />
+                <span className={styles.infoRejected}>반려 {rejectedCount}건</span>
+              </>
+            )}
           </div>
 
-          {/* ── 타임라인 ── */}
-          <StatusTimeline status={app.status} />
+          {/* ── 진행 단계 ── */}
+          <div className={styles.timelineCard}>
+            <StatusTimeline status={app.status} />
+          </div>
 
-          {/* ── 제출 실적 ── */}
+          {/* ── 작품 목록 ── */}
           <section className={styles.entriesSection}>
             <h3 className={styles.entriesSectionTitle}>
               제출 실적 상세
@@ -265,7 +427,6 @@ function DetailPanel({ app, onClose, onReapply }: { app: Application; onClose: (
             </h3>
 
             {isMulti ? (
-              /* 복합 분야: 분야별 그룹 */
               app.categories.map((cat) => {
                 const entries = byCategory[cat] ?? [];
                 const catRejected = getRejectedCount(entries);
@@ -283,17 +444,16 @@ function DetailPanel({ app, onClose, onReapply }: { app: Application; onClose: (
                     </div>
                     <div className={styles.entryList}>
                       {entries.map((entry, i) => (
-                        <EntryCard key={i} entry={entry} index={i} />
+                        <EntryCard key={i} entry={entry} index={i} onReapply={onReapply} />
                       ))}
                     </div>
                   </div>
                 );
               })
             ) : (
-              /* 단일 분야: 평탄 목록 */
               <div className={styles.entryList}>
                 {app.entries.map((entry, i) => (
-                  <EntryCard key={i} entry={entry} index={i} />
+                  <EntryCard key={i} entry={entry} index={i} onReapply={onReapply} />
                 ))}
               </div>
             )}
@@ -301,17 +461,15 @@ function DetailPanel({ app, onClose, onReapply }: { app: Application; onClose: (
         </div>
       </div>
 
-      {/* ── 재신청 버튼 ── */}
-      {app.status === "반려" && (
-        <div className={styles.detailFooter}>
+      {/* ── Sticky CTA ── */}
+      <div className={styles.detailFooter}>
+        <button type="button" className={styles.closeFooterBtn} onClick={onClose}>닫기</button>
+        {app.status === "반려" && (
           <button type="button" className={styles.reapplyBtn} onClick={onReapply}>
-            반려 사유 확인 후 재신청하기
-            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" width={13} height={13}>
-              <line x1="3" y1="8" x2="13" y2="8" /><polyline points="9 4 13 8 9 12" />
-            </svg>
+            반려 사유 확인 후 재신청하기 →
           </button>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 }
@@ -333,35 +491,22 @@ function ListItem({ app, active, onClick }: { app: Application; active: boolean;
       onClick={onClick}
       aria-current={active ? true : undefined}
     >
-      {/* 위계 1: 단일/복합 + 심사 상태 */}
       <div className={styles.itemRow1}>
         <span className={styles.itemFieldType}>{fieldType}</span>
         <StatusBadge status={app.status} />
       </div>
-
-      {/* 위계 2: 분야명 (핵심 식별자) */}
       <div className={styles.itemCategories}>
         {app.categories.map((cat) => (
           <span key={cat} className={styles.itemCategory}>
-            <CategoryIcon category={cat} size={12} />
+            <CategoryIcon category={cat} size={14} />
             {cat}
           </span>
         ))}
       </div>
-
-      {/* 위계 3: 부가 메타 */}
-      <div className={styles.itemMeta}>
-        {app.type} · {app.applyDate} · {app.entries.length}점
-      </div>
-
-      {/* 위계 4: 반려 경보 */}
+      <div className={styles.itemMeta}>{app.applyDate} · {app.entries.length}점</div>
       {rejectedCount > 0 && (
         <div className={styles.itemAlert}>
-          <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" width={10} height={10} aria-hidden="true">
-            <circle cx="6" cy="6" r="5" />
-            <line x1="6" y1="4" x2="6" y2="6.5" />
-            <circle cx="6" cy="8.5" r="0.5" fill="currentColor" />
-          </svg>
+          <span className={styles.itemAlertDot} />
           {rejectedCount}건 반려 — 사유 확인 필요
         </div>
       )}
@@ -398,17 +543,28 @@ export default function ApplicationStatusPage({ onReapply }: { onReapply?: () =>
         ) : applications.length === 0 ? (
           <div className={styles.emptyState}><p>신청 내역이 없습니다.</p></div>
         ) : (
-          <ul className={styles.list} role="list">
-            {applications.map((app) => (
-              <li key={app.id}>
-                <ListItem
-                  app={app}
-                  active={selected?.id === app.id}
-                  onClick={() => setSelected(selected?.id === app.id ? null : app)}
-                />
-              </li>
-            ))}
-          </ul>
+          <div className={styles.listGroups}>
+            {STATUS_ORDER.map((status) => {
+              const group = applications.filter((a) => a.status === status);
+              if (group.length === 0) return null;
+              const labelCls = status === "반려" ? styles.groupLabelRejected
+                             : status === "승인" ? styles.groupLabelApproved
+                             : styles.groupLabelPending;
+              return (
+                <div key={status}>
+                  <div className={`${styles.groupLabel} ${labelCls}`}>{status}</div>
+                  {group.map((app) => (
+                    <ListItem
+                      key={app.id}
+                      app={app}
+                      active={selected?.id === app.id}
+                      onClick={() => setSelected(selected?.id === app.id ? null : app)}
+                    />
+                  ))}
+                </div>
+              );
+            })}
+          </div>
         )}
       </div>
 

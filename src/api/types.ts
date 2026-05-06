@@ -19,14 +19,37 @@ export interface EntryFile {
 
 export type EntryStatus = "승인" | "반려" | "심사중";
 
+export interface RejectionCriterion {
+  status: "fail" | "pass" | "neutral";
+  text: string;
+  badge: string;
+  highlight?: boolean;
+}
+
+export interface EntryRejectionDetail {
+  fullReason: string;
+  criteriaTitle?: string;
+  criteriaSubtitle?: string;
+  criteria?: RejectionCriterion[];
+  unmetItems?: string[];
+  actionSteps?: string[];
+}
+
 export interface ApplicationEntry {
   category: string;
   title: string;
   publisher: string;
   date: string;
   genre: string;
+  volume?: string;
+  character?: string;
+  method?: string;
+  role?: string;
+  serialStart?: string;
+  serialEnd?: string;
   entryStatus?: EntryStatus;
   entryReason?: string;
+  rejectionDetail?: EntryRejectionDetail;
   files?: EntryFile[];
 }
 
