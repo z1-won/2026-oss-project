@@ -194,12 +194,21 @@
 /* ── 데모 안내 ───────────────────────────── */
 .demoHint {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: 6px;
+  gap: 4px;
   padding: 10px 32px 20px;
   font-size: 11px;
   color: var(--krds-text-disabled, #adb5bd);
+}
+
+.demoHintLabel {
+  font-weight: 600;
+  font-size: 10px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--krds-text-disabled, #adb5bd);
+  margin-bottom: 2px;
 }
 
 .demoHint code {
