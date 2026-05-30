@@ -15,7 +15,8 @@ export async function changePassword(currentPassword: string, newPassword: strin
 }
 
 export async function verifyIdentity(): Promise<void> {
-  // 본인인증 외부 서비스 연동 시 구현 (PASS, 카카오 인증 등)
+  // TODO: PASS, 카카오 인증 등 외부 서비스 연동 후 구현
+  throw new Error("본인인증 서비스가 아직 연동되지 않았습니다.");
 }
 
 export async function uploadPhoto(file: File): Promise<string> {

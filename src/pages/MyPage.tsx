@@ -29,6 +29,7 @@ export default function MyPage({ onBack }: MyPageProps) {
   const photoInputRef = useRef<HTMLInputElement>(null);
 
   const [verifying, setVerifying] = useState(false);
+  const [verifyError, setVerifyError] = useState<string | null>(null);
   const [nationality, setNationality] = useState<"korean" | "foreign">(user?.nationality ?? "korean");
   const [penName, setPenName] = useState(user?.penName ?? "");
 
@@ -67,9 +68,12 @@ export default function MyPage({ onBack }: MyPageProps) {
 
   const handleVerify = async () => {
     setVerifying(true);
+    setVerifyError(null);
     try {
       await verifyIdentity();
       await updateUser({ isVerified: true, verified: true });
+    } catch (e) {
+      setVerifyError(e instanceof Error ? e.message : "본인인증에 실패했습니다.");
     } finally {
       setVerifying(false);
     }
@@ -175,6 +179,9 @@ export default function MyPage({ onBack }: MyPageProps) {
                   </>
                 )}
               </div>
+              {verifyError && (
+                <p className={styles.fieldError}>{verifyError}</p>
+              )}
             </div>
 
             {/* 국적 */}
