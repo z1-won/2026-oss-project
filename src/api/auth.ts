@@ -11,8 +11,8 @@ export async function login(email: string, password: string): Promise<User> {
 }
 
 export async function logout(): Promise<void> {
-  await request("/api/auth/logout", { method: "POST" });
-  tokenStore.clear();
+  try { await request("/api/auth/logout", { method: "POST" }); }
+  finally { tokenStore.clear(); }
 }
 
 export async function signup(data: SignupRequest): Promise<User> {

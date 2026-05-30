@@ -62,8 +62,8 @@ export async function request<T>(path: string, init?: RequestInit, timeoutMs = 1
     }
 
     if (res.status === 204) return undefined as T;
-    const json = await res.json() as { success?: boolean; data?: unknown; message?: string | null } | unknown;
-    if (json && typeof json === "object" && "success" in (json as object)) {
+    const json: unknown = await res.json();
+    if (json && typeof json === "object" && "success" in json && typeof (json as Record<string, unknown>).success === "boolean") {
       const apiRes = json as { success: boolean; data: T; message: string | null };
       if (!apiRes.success) throw new ApiError(res.status, apiRes.message ?? res.statusText);
       return apiRes.data;

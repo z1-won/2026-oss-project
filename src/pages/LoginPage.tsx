@@ -137,8 +137,6 @@ export default function LoginPage({ onSuccess, onSignup, onForgotPassword }: Log
             </button>
           </div>
         </div>
-
-
       </div>
     </div>
   );
