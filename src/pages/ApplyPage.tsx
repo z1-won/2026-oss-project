@@ -13,6 +13,7 @@ import { useAuth } from "../context/AuthContext";
 import { submitApplication } from "../api/application";
 import type { SubmitApplicationRequest, EvidenceSlot } from "../api/types";
 import { validateApplicationStep2 } from "../utils/validation";
+import { formatGender } from "../utils/formatters";
 import { MAX_CATEGORIES } from "../constants/rules";
 
 const EVIDENCE_SLOTS: { key: EvidenceSlot; label: string; hint: string }[] = [
@@ -161,11 +162,11 @@ export default function ApplyPage({ onGoToMyPage, onGoToStatus }: ApplyPageProps
   return (
     <>
       <div className="applyInner">
-        <h1 className="pageTitle">일반 유형 신청</h1>
+        <h1 className="pageTitle">일반 유형 신청서 미리 작성</h1>
         <div className="descBox">작품 증빙 과정에 대한 규정은 다음과 같습니다.</div>
 
         <div className="stepBarWrap">
-          <StepBar steps={["01 본인 인증", "02 증빙 자료 제출", "03 최종 확인하기"]} currentStep={step} />
+          <StepBar steps={["01 본인 인증", "02 증빙 자료 확인", "03 최종 확인하기"]} currentStep={step} />
         </div>
 
         {/* ── Step 1: 신청인 정보 확인 ── */}
@@ -179,7 +180,7 @@ export default function ApplyPage({ onGoToMyPage, onGoToStatus }: ApplyPageProps
               <div className="identityTable">
                 <InfoRow label="이름" value={user?.name ?? ""} />
                 <InfoRow label="생년월일" value={user?.birth ?? ""} />
-                <InfoRow label="성별" value={user?.gender ?? ""} />
+                <InfoRow label="성별" value={user ? formatGender(user.gender) : ""} />
                 <InfoRow label="휴대폰" value={user?.phone ?? ""} />
                 <InfoRow label="이메일" value={user?.email ?? ""} />
               </div>
@@ -330,12 +331,12 @@ export default function ApplyPage({ onGoToMyPage, onGoToStatus }: ApplyPageProps
                     <circle cx="32" cy="32" r="28" />
                     <polyline points="20 33 28 41 44 24" />
                   </svg>
-                  <h2 className="sectionTitle" style={{ textAlign: "center", margin: 0 }}>신청이 완료되었습니다</h2>
+                  <h2 className="sectionTitle" style={{ textAlign: "center", margin: 0 }}>신청서 작성이 완료되었습니다</h2>
                   <p style={{ color: "var(--krds-text-2)", margin: 0 }}>
-                    신청 번호: <strong>{submittedId}</strong>
+                    작성 번호: <strong>{submittedId}</strong>
                   </p>
                   <p style={{ color: "var(--krds-text-3)", margin: 0, fontSize: "0.9rem" }}>
-                    제출하신 내용은 신청 현황에서 확인하실 수 있습니다.
+                    실제 신청은 공식 사이트(kawfartist.kr)에서 진행해 주세요. 작성한 내용은 신청 현황에서 확인할 수 있습니다.
                   </p>
                 </div>
               </section>
@@ -354,7 +355,7 @@ export default function ApplyPage({ onGoToMyPage, onGoToStatus }: ApplyPageProps
                 <div className="identityTable">
                   <InfoRow label="이름" value={user?.name ?? ""} />
                   <InfoRow label="생년월일" value={user?.birth ?? ""} />
-                  <InfoRow label="성별" value={user?.gender ?? ""} />
+                  <InfoRow label="성별" value={user ? formatGender(user.gender) : ""} />
                   <InfoRow label="휴대폰" value={user?.phone ?? ""} />
                   <InfoRow label="이메일" value={user?.email ?? ""} />
                 </div>
@@ -397,7 +398,7 @@ export default function ApplyPage({ onGoToMyPage, onGoToStatus }: ApplyPageProps
               </section>
 
               <div className="summaryAgreement">
-                <p>위 내용이 사실과 다를 경우 예술활동증명이 취소될 수 있습니다.</p>
+                <p>이 서비스는 신청 준비를 돕는 도우미입니다. 실제 신청은 공식 사이트(kawfartist.kr)에서 진행해 주세요.</p>
               </div>
 
               <div className="actionRow">

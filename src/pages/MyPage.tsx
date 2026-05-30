@@ -5,7 +5,7 @@ import { useAuth } from "../context/AuthContext";
 import { changePassword, verifyIdentity, uploadPhoto } from "../api/user";
 import Input from "../components/common/Input";
 import { EyeIcon } from "../components/common/icons";
-import { formatPhone } from "../utils/formatters";
+import { formatPhone, formatGender } from "../utils/formatters";
 import { MIN_PASSWORD_LENGTH, PHONE_DIGITS, MAX_PEN_NAME_LENGTH } from "../constants/rules";
 
 interface MyPageProps {
@@ -29,6 +29,7 @@ export default function MyPage({ onBack }: MyPageProps) {
   const photoInputRef = useRef<HTMLInputElement>(null);
 
   const [verifying, setVerifying] = useState(false);
+  const [verifyError, setVerifyError] = useState<string | null>(null);
   const [nationality, setNationality] = useState<"korean" | "foreign">(user?.nationality ?? "korean");
   const [penName, setPenName] = useState(user?.penName ?? "");
 
@@ -67,9 +68,13 @@ export default function MyPage({ onBack }: MyPageProps) {
 
   const handleVerify = async () => {
     setVerifying(true);
+    setVerifyError(null);
     try {
       await verifyIdentity();
-      await updateUser({ isVerified: true });
+      // 인증 완료 후 서버에서 갱신된 사용자 정보를 받아 상태를 업데이트해야 함
+      // (verifyIdentity 연동 시 반환값으로 처리)
+    } catch (e) {
+      setVerifyError(e instanceof Error ? e.message : "본인인증에 실패했습니다.");
     } finally {
       setVerifying(false);
     }
@@ -145,7 +150,7 @@ export default function MyPage({ onBack }: MyPageProps) {
               </div>
               <div className={styles.readonlyRow}>
                 <span className={styles.readonlyLabel}>성별</span>
-                <span className={styles.readonlyValue}>{user?.gender}</span>
+                <span className={styles.readonlyValue}>{user ? formatGender(user.gender) : ""}</span>
               </div>
             </div>
           </section>
@@ -158,7 +163,7 @@ export default function MyPage({ onBack }: MyPageProps) {
             <div className={styles.field}>
               <span className={styles.fieldLabel}>본인 인증</span>
               <div className={styles.verifyRow}>
-                {user?.isVerified ? (
+                {(user?.isVerified ?? user?.verified) ? (
                   <span className={styles.badgeVerified}>
                     <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" width={13} height={13}>
                       <circle cx="8" cy="8" r="6.5" />
@@ -175,6 +180,9 @@ export default function MyPage({ onBack }: MyPageProps) {
                   </>
                 )}
               </div>
+              {verifyError && (
+                <p className={styles.fieldError}>{verifyError}</p>
+              )}
             </div>
 
             {/* 국적 */}

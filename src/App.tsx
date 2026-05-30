@@ -89,8 +89,7 @@ export default function App() {
       serviceName="아트패스 artPass"
       orgName="공개SW프로젝트 1분반"
       address="컴퓨터공학전공"
-      tel="044-000-0000"
-      fax="044-000-0001"
+      tel="010-7588-6132"
       policyLinks={POLICY_LINKS}
       familySites={FAMILY_SITES}
     />

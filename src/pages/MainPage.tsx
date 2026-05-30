@@ -76,17 +76,17 @@ export default function MainPage({ onApply, onStatus, onGuide }: MainPageProps) 
       <section className={styles.hero}>
         <div className={styles.heroInner}>
           <div className={styles.heroContent}>
-            <p className={styles.heroEyebrow}>한국예술인복지재단 공식 서비스</p>
+            <p className={styles.heroEyebrow}>예술활동증명 신청 준비 도우미</p>
             <h1 className={styles.heroTitle}>
-              예술인의 활동을<br />공식으로 증명합니다
+              예술인의 활동을<br />미리 준비하세요
             </h1>
             <p className={styles.heroDesc}>
-              예술활동증명은 예술인의 창작 실적을 정부가 공식 인정하는 제도입니다.<br />
-              5년간의 활동 실적을 바탕으로 다양한 예술인 지원 혜택을 받으세요.
+              예술활동증명은 예술인의 창작 실적을 인정하는 제도입니다.<br />
+              실제 신청 전 작성 내용을 미리 점검하고 준비할 수 있습니다.<br />
             </p>
             <div className={styles.heroCta}>
               <button type="button" className={styles.ctaPrimary} onClick={onApply}>
-                지금 신청하기
+                신청서 작성해보기
                 <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" width={16} height={16}>
                   <line x1="4" y1="10" x2="16" y2="10" />
                   <polyline points="11 5 16 10 11 15" />
@@ -141,6 +141,33 @@ export default function MainPage({ onApply, onStatus, onGuide }: MainPageProps) 
           </div>
         </div>
       </section>
+
+      {/* ── 실제 신청 사이트 배너 ── */}
+      <div className={styles.externalBanner}>
+        <div className={styles.externalBannerInner}>
+          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" width={18} height={18} aria-hidden="true">
+            <circle cx="10" cy="10" r="8" />
+            <line x1="10" y1="7" x2="10" y2="10" />
+            <circle cx="10" cy="13" r="0.5" fill="currentColor" strokeWidth={2} />
+          </svg>
+          <p className={styles.externalBannerText}>
+            <strong>실제 예술활동증명 신청</strong>은 한국예술인복지재단 공식 사이트에서 진행됩니다.
+          </p>
+          <a
+            href="https://www.kawfartist.kr/views/cms/hkor/cs/cs01002_.jsp"
+            target="_blank"
+            rel="noopener noreferrer"
+            className={styles.externalBannerLink}
+          >
+            공식 사이트 바로가기
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" width={13} height={13} aria-hidden="true">
+              <path d="M6 4H4a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h7a1 1 0 0 0 1-1v-2" />
+              <polyline points="9 3 13 3 13 7" />
+              <line x1="13" y1="3" x2="7" y2="9" />
+            </svg>
+          </a>
+        </div>
+      </div>
 
       {/* ── 빠른 메뉴 ── */}
       <section className={styles.quick}>

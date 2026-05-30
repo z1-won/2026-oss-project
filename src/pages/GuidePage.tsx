@@ -13,8 +13,8 @@ const FEATURES = [
         <line x1="16" y1="16" x2="16" y2="28" />
       </svg>
     ),
-    title: "온라인 신청",
-    desc: "언제 어디서나 PC·모바일로 예술활동증명을 신청할 수 있습니다.",
+    title: "신청서 미리 작성",
+    desc: "실제 신청 전 PC·모바일로 신청서 작성 흐름을 미리 체험할 수 있습니다.",
   },
   {
     icon: (
@@ -25,8 +25,8 @@ const FEATURES = [
         <line x1="10" y1="22" x2="16" y2="22" />
       </svg>
     ),
-    title: "실시간 진행 현황",
-    desc: "심사 단계별 진행 상황을 실시간으로 확인할 수 있습니다.",
+    title: "진행 현황 미리 확인",
+    desc: "심사 단계별 진행 흐름과 결과 유형을 미리 파악할 수 있습니다.",
   },
   {
     icon: (
@@ -77,7 +77,7 @@ const HOW_TO = [
   {
     step: "05",
     title: "심사 및 결과 확인",
-    desc: "담당자 심사 후 결과를 이메일과 마이페이지에서 확인할 수 있습니다.",
+    desc: "실제 제출 후 담당자 심사 결과는 공식 사이트(kawfartist.kr)에서 확인합니다. 이 서비스에서는 결과 화면을 미리 체험할 수 있습니다.",
   },
 ];
 
@@ -96,15 +96,15 @@ const FAQ = [
   },
   {
     q: "제출 후 내용을 수정할 수 있나요?",
-    a: "최종 제출 이후에는 신청 내용 수정이 불가합니다. 제출 전 검토 단계에서 꼼꼼하게 확인해 주세요. 보완 요청 시에는 담당자 안내에 따라 진행됩니다.",
+    a: "실제 공식 신청에서는 최종 제출 이후 내용 수정이 불가합니다. 아트패스는 도우미 서비스로, 실제 신청 결과에는 영향을 주지 않습니다. 공식 제출 전 이곳에서 충분히 작성 내용을 점검해 보세요.",
   },
 ];
 
 const MEMBERS = [
-  { name: "방지원", role: "팀장 · 풀스택", github: "z1-won" },
-  { name: "팀원 2", role: "프론트엔드", github: "" },
-  { name: "팀원 3", role: "백엔드", github: "" },
-  { name: "팀원 4", role: "디자인 · UI", github: "" },
+  { name: "방지원", role: "팀장 · 총괄", github: "z1-won" },
+  { name: "김서연", role: "프론트엔드", github: "seoyeon6894" },
+  { name: "박수현", role: "백엔드", github: "clapppp" },
+  { name: "위인준", role: "AI · 기획", github: "" },
 ];
 
 export default function GuidePage({ onApply }: GuidePageProps) {
@@ -117,7 +117,7 @@ export default function GuidePage({ onApply }: GuidePageProps) {
           <p className={styles.eyebrow}>아트패스 artPass</p>
           <h1 className={styles.pageTitle}>이용안내</h1>
           <p className={styles.pageDesc}>
-            예술활동증명 신청 서비스 아트패스의 주요 기능과 이용 방법을 안내합니다.
+            예술활동증명 신청을 미리 준비할 수 있는 도우미 서비스 아트패스의 주요 기능과 이용 방법을 안내합니다.
           </p>
         </div>
       </section>
@@ -128,17 +128,17 @@ export default function GuidePage({ onApply }: GuidePageProps) {
           <div className={styles.introBlock}>
             <div className={styles.introText}>
               <span className={styles.badge}>서비스 소개</span>
-              <h2 className={styles.sectionTitle}>예술인의 활동을, 공식으로 증명합니다</h2>
+              <h2 className={styles.sectionTitle}>예술활동증명 신청, 미리 준비해보세요</h2>
               <p className={styles.bodyText}>
-                <strong>아트패스(artPass)</strong>는 한국예술인복지재단의 예술활동증명 제도를 온라인으로
-                간편하게 신청할 수 있도록 지원하는 서비스입니다.
+                <strong>아트패스(artPass)</strong>는 한국예술인복지재단의 예술활동증명 신청 흐름을 미리 체험하고
+                준비할 수 있는 도우미 서비스입니다. 실제 신청은 공식 사이트에서 진행해야 합니다.
               </p>
               <p className={styles.bodyText}>
-                음악·미술·문학·공연 등 다양한 예술 분야에서 활동하는 예술인이라면 누구나 신청할 수 있으며,
-                증명을 통해 예술인 고용보험, 창작지원금 등 다양한 복지 혜택을 받을 수 있습니다.
+                음악·미술·문학·공연 등 다양한 예술 분야의 신청서 작성 방식을 사전에 확인하고,
+                필요한 증빙 자료와 기준을 파악하는 데 활용하세요.
               </p>
               <button type="button" className={styles.ctaBtn} onClick={onApply}>
-                지금 신청하기
+                신청서 작성해보기
                 <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" width={14} height={14}>
                   <line x1="3" y1="8" x2="13" y2="8" />
                   <polyline points="9 4 13 8 9 12" />
