@@ -5,7 +5,7 @@ import { useAuth } from "../context/AuthContext";
 import { changePassword, verifyIdentity, uploadPhoto } from "../api/user";
 import Input from "../components/common/Input";
 import { EyeIcon } from "../components/common/icons";
-import { formatPhone } from "../utils/formatters";
+import { formatPhone, formatGender } from "../utils/formatters";
 import { MIN_PASSWORD_LENGTH, PHONE_DIGITS, MAX_PEN_NAME_LENGTH } from "../constants/rules";
 
 interface MyPageProps {
@@ -69,7 +69,7 @@ export default function MyPage({ onBack }: MyPageProps) {
     setVerifying(true);
     try {
       await verifyIdentity();
-      await updateUser({ isVerified: true });
+      await updateUser({ isVerified: true, verified: true });
     } finally {
       setVerifying(false);
     }
@@ -145,7 +145,7 @@ export default function MyPage({ onBack }: MyPageProps) {
               </div>
               <div className={styles.readonlyRow}>
                 <span className={styles.readonlyLabel}>성별</span>
-                <span className={styles.readonlyValue}>{user?.gender}</span>
+                <span className={styles.readonlyValue}>{user ? formatGender(user.gender) : ""}</span>
               </div>
             </div>
           </section>
@@ -158,7 +158,7 @@ export default function MyPage({ onBack }: MyPageProps) {
             <div className={styles.field}>
               <span className={styles.fieldLabel}>본인 인증</span>
               <div className={styles.verifyRow}>
-                {user?.isVerified ? (
+                {(user?.isVerified ?? user?.verified) ? (
                   <span className={styles.badgeVerified}>
                     <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" width={13} height={13}>
                       <circle cx="8" cy="8" r="6.5" />

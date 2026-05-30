@@ -1,10 +1,12 @@
 export interface User {
   name: string;
   birth: string;
-  gender: string;
+  gender: "M" | "F";
   phone: string;
   email: string;
-  isVerified: boolean;
+  // Jackson이 isVerified → verified 로 직렬화하는 경우를 대비해 양쪽 허용
+  isVerified?: boolean;
+  verified?: boolean;
   nationality: "korean" | "foreign";
   penName: string;
   role: "user" | "admin";

@@ -13,6 +13,7 @@ import { useAuth } from "../context/AuthContext";
 import { submitApplication } from "../api/application";
 import type { SubmitApplicationRequest, EvidenceSlot } from "../api/types";
 import { validateApplicationStep2 } from "../utils/validation";
+import { formatGender } from "../utils/formatters";
 import { MAX_CATEGORIES } from "../constants/rules";
 
 const EVIDENCE_SLOTS: { key: EvidenceSlot; label: string; hint: string }[] = [
@@ -179,7 +180,7 @@ export default function ApplyPage({ onGoToMyPage, onGoToStatus }: ApplyPageProps
               <div className="identityTable">
                 <InfoRow label="이름" value={user?.name ?? ""} />
                 <InfoRow label="생년월일" value={user?.birth ?? ""} />
-                <InfoRow label="성별" value={user?.gender ?? ""} />
+                <InfoRow label="성별" value={user ? formatGender(user.gender) : ""} />
                 <InfoRow label="휴대폰" value={user?.phone ?? ""} />
                 <InfoRow label="이메일" value={user?.email ?? ""} />
               </div>
@@ -354,7 +355,7 @@ export default function ApplyPage({ onGoToMyPage, onGoToStatus }: ApplyPageProps
                 <div className="identityTable">
                   <InfoRow label="이름" value={user?.name ?? ""} />
                   <InfoRow label="생년월일" value={user?.birth ?? ""} />
-                  <InfoRow label="성별" value={user?.gender ?? ""} />
+                  <InfoRow label="성별" value={user ? formatGender(user.gender) : ""} />
                   <InfoRow label="휴대폰" value={user?.phone ?? ""} />
                   <InfoRow label="이메일" value={user?.email ?? ""} />
                 </div>

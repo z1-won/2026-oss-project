@@ -3,7 +3,6 @@ import Button from "../components/common/Button";
 import Input from "../components/common/Input";
 import styles from "./LoginPage.module.css";
 import { useAuth } from "../context/AuthContext";
-import { MOCK_CREDENTIALS } from "../api/auth";
 import type { User } from "../api/types";
 import { EyeIcon } from "../components/common/icons";
 
@@ -139,19 +138,7 @@ export default function LoginPage({ onSuccess, onSignup, onForgotPassword }: Log
           </div>
         </div>
 
-        {/* 데모 안내 */}
-        <div className={styles.demoHint}>
-          <span>사용자:</span>
-          <code>{MOCK_CREDENTIALS.user.email}</code>
-          <span>/</span>
-          <code>{MOCK_CREDENTIALS.user.password}</code>
-        </div>
-        <div className={styles.demoHint}>
-          <span>관리자:</span>
-          <code>{MOCK_CREDENTIALS.admin.email}</code>
-          <span>/</span>
-          <code>{MOCK_CREDENTIALS.admin.password}</code>
-        </div>
+
       </div>
     </div>
   );

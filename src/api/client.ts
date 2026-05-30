@@ -62,8 +62,13 @@ export async function request<T>(path: string, init?: RequestInit, timeoutMs = 1
     }
 
     if (res.status === 204) return undefined as T;
-    const data: unknown = await res.json();
-    return data as T;
+    const json = await res.json() as { success?: boolean; data?: unknown; message?: string | null } | unknown;
+    if (json && typeof json === "object" && "success" in (json as object)) {
+      const apiRes = json as { success: boolean; data: T; message: string | null };
+      if (!apiRes.success) throw new ApiError(res.status, apiRes.message ?? res.statusText);
+      return apiRes.data;
+    }
+    return json as T;
   } finally {
     clearTimeout(timer);
   }
