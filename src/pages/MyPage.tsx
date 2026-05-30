@@ -71,7 +71,8 @@ export default function MyPage({ onBack }: MyPageProps) {
     setVerifyError(null);
     try {
       await verifyIdentity();
-      await updateUser({ isVerified: true, verified: true });
+      // 인증 완료 후 서버에서 갱신된 사용자 정보를 받아 상태를 업데이트해야 함
+      // (verifyIdentity 연동 시 반환값으로 처리)
     } catch (e) {
       setVerifyError(e instanceof Error ? e.message : "본인인증에 실패했습니다.");
     } finally {
